@@ -30,7 +30,10 @@
     "chalk": "^5.3.0",
     "axios": "^1.7.7",
     "yaml": "^2.4.5",
-    "ora": "^8.1.0"
+    "ora": "^8.1.0",
+    "tinyagi": "latest",
+    "hermes-protocol": "latest",
+    "openclaw": "latest"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
