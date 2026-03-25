@@ -1,0 +1,39 @@
+{
+  "name": "omnigent",
+  "version": "1.0.0",
+  "description": "OmniAgent - Universal AI Agent Framework combining OpenClaw, TinyAGI, Hermes, and Claude capabilities",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/**/*.test.js",
+    "lint": "eslint src/",
+    "build": "node scripts/build.js",
+    "cli": "node src/cli.js",
+    "config": "node src/config/setup.js",
+    "agent": "node src/agent/omnigent.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "omnigent",
+    "claude",
+    "multi-provider",
+    "agent-framework"
+  ],
+  "author": "OmniAgent Team",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "dotenv": "^16.4.5",
+    "commander": "^12.1.0",
+    "chalk": "^5.3.0",
+    "axios": "^1.7.7",
+    "yaml": "^2.4.5",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "prettier": "^3.3.3"
+  }
+}
