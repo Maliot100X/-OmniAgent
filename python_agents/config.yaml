@@ -1,0 +1,31 @@
+provider: anthropic
+model: claude-3-5-sonnet-20241022
+max_tokens: 2048
+
+providers:
+  anthropic:
+    enabled: true
+    api_key: ${ANTHROPIC_API_KEY}
+  openai:
+    enabled: false
+    api_key: ${OPENAI_API_KEY}
+  local:
+    enabled: false
+    base_url: http://localhost:11434
+    model: mistral
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+agent:
+  name: UnifiedAgent
+  max_iterations: 100
+  timeout: 30
+  auto_retry: true
+  retry_count: 3
+
+tools:
+  enable_system_commands: true
+  enable_file_operations: true
+  sandbox_mode: false
