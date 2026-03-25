@@ -4,6 +4,7 @@ import readline from 'readline';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { commandRegistry } from './commands/implementations.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,6 +65,41 @@ ${colors.dim}──────────────────────�
 `);
 }
 
+// Execute command by looking it up in the registry
+async function executeCommand(input) {
+  try {
+    // Parse input into command and arguments
+    const parts = input.trim().split(/\s+/);
+    const commandKey = parts.join(' ');
+    
+    // Try exact match first
+    if (commandRegistry[commandKey]) {
+      const result = commandRegistry[commandKey]();
+      console.log(`\n${colors.bright}${result}${colors.reset}\n`);
+      return;
+    }
+
+    // Try partial match (for commands with arguments)
+    for (const [key, fn] of Object.entries(commandRegistry)) {
+      const keyParts = key.split(' ');
+      if (keyParts.length > 1 && parts.length >= keyParts.length) {
+        const matches = keyParts.every((part, i) => part === parts[i]);
+        if (matches) {
+          const args = parts.slice(keyParts.length);
+          const result = fn(...args);
+          console.log(`\n${colors.bright}${result}${colors.reset}\n`);
+          return;
+        }
+      }
+    }
+
+    // Command not found
+    console.log(`\n${colors.red}Unknown command: '${input}'${colors.reset}\n${colors.dim}Type 'help' for available commands${colors.reset}\n`);
+  } catch (error) {
+    console.log(`\n${colors.red}Error executing command: ${error.message}${colors.reset}\n`);
+  }
+}
+
 // Main interactive shell
 async function startInteractiveShell() {
   printBanner();
@@ -75,12 +111,12 @@ async function startInteractiveShell() {
     historySize: 100,
   });
 
-  const prompt = () => {
-    rl.question(`${colors.green}omnigent>${colors.reset} `, (input) => {
+  const promptAsync = async () => {
+    rl.question(`${colors.green}omnigent>${colors.reset} `, async (input) => {
       const command = input.trim().toLowerCase();
 
       if (!command) {
-        prompt();
+        promptAsync();
         return;
       }
 
@@ -110,18 +146,15 @@ async function startInteractiveShell() {
         rl.close();
         process.exit(0);
       } else {
-        if (command.startsWith('/') || command.includes(' ')) {
-          console.log(`\n${colors.yellow}🚀 Executing command:${colors.reset} ${colors.bright}${command}${colors.reset}\n${colors.dim}(Command execution coming soon)${colors.reset}\n`);
-        } else {
-          console.log(`\n${colors.red}Unknown command: '${command}'${colors.reset}\n${colors.dim}Type 'help' for available commands${colors.reset}\n`);
-        }
+        // Parse and execute command
+        await executeCommand(command);
       }
 
-      prompt();
+      promptAsync();
     });
   };
 
-  prompt();
+  promptAsync();
 }
 
 function showHelp() {
