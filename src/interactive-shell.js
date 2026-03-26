@@ -4,7 +4,8 @@ import readline from 'readline';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { commandRegistry } from './commands/implementations.js';
+import allCommands from './commands/index.js';
+const commandRegistry = allCommands;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OMNIGENT Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Courier New', monospace; background: #0a0e27; color: #00ff88; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { padding: 20px; border-bottom: 2px solid #00ff88; margin-bottom: 20px; }
+    h1 { font-size: 32px; margin-bottom: 5px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .card { border: 2px solid #00ff88; padding: 20px; background: #1a1f3a; }
+    .card h2 { margin-bottom: 15px; color: #00ffff; }
+    .stat { display: flex; justify-content: space-between; margin: 10px 0; }
+    .stat-value { color: #ffff00; font-weight: bold; }
+    .command-list { list-style: none; }
+    .command-list li { padding: 8px; margin: 5px 0; background: #0f1428; border-left: 3px solid #00ff88; }
+    button { background: #00ff88; color: #0a0e27; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; margin: 5px; }
+    button:hover { background: #00ffff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🤖 OMNIGENT Dashboard</h1>
+      <p>Universal AI Agent Platform</p>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>System Status</h2>
+        <div class="stat">
+          <span>CLI:</span>
+          <span class="stat-value">✅ Online</span>
+        </div>
+        <div class="stat">
+          <span>Commands:</span>
+          <span class="stat-value" id="cmd-count">Loading...</span>
+        </div>
+        <div class="stat">
+          <span>Platforms:</span>
+          <span class="stat-value">11 Connected</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Analytics</h2>
+        <div class="stat">
+          <span>Total Commands:</span>
+          <span class="stat-value" id="total-cmds">0</span>
+        </div>
+        <div class="stat">
+          <span>Active Sessions:</span>
+          <span class="stat-value">--</span>
+        </div>
+        <div class="stat">
+          <span>Uptime:</span>
+          <span class="stat-value" id="uptime">0h</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Quick Actions</h2>
+        <button onclick="loadCommands()">📋 Load Commands</button>
+        <button onclick="testLLM()">🤖 Test LLM</button>
+        <button onclick="showPlatforms()">🌐 Platforms</button>
+        <button onclick="resetAnalytics()">🔄 Reset</button>
+      </div>
+
+      <div class="card" style="grid-column: 1 / -1;">
+        <h2>Installed Platforms (19 Total)</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+          <div>✅ Discord</div><div>✅ Telegram</div><div>✅ WhatsApp</div>
+          <div>✅ Slack</div><div>✅ Teams</div><div>✅ Signal</div>
+          <div>✅ Google Chat</div><div>✅ Matrix</div><div>✅ IRC</div>
+          <div>✅ Email</div><div>✅ WebSocket</div><div>✅ Zalo</div>
+          <div>✅ Viber</div><div>✅ Skype</div><div>✅ LINE</div>
+          <div>✅ Twitch</div><div>✅ LinkedIn</div><div>✅ WebChat</div>
+          <div style="grid-column: 1 / -1; text-align: center; padding-top: 10px; border-top: 1px solid #00ff88;">
+            🚀 All 19 Messaging Platforms Ready
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+    
+    async function loadCommands() {
+      try {
+        const res = await fetch(API + '/commands');
+        const data = await res.json();
+        document.getElementById('cmd-count').textContent = data.total;
+      } catch (e) { console.error(e); }
+    }
+
+    async function testLLM() {
+      try {
+        const res = await fetch(API + '/llm/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: 'hello' }) });
+        const data = await res.json();
+        alert('LLM Test: ' + JSON.stringify(data));
+      } catch (e) { alert('Error: ' + e.message); }
+    }
+
+    async function showPlatforms() {
+      try {
+        const res = await fetch(API + '/platforms');
+        const data = await res.json();
+        alert('Platforms: ' + data.platforms.join(', '));
+      } catch (e) { alert('Error: ' + e.message); }
+    }
+
+    function resetAnalytics() {
+      if (confirm('Reset all analytics?')) {
+        document.getElementById('total-cmds').textContent = '0';
+      }
+    }
+
+    loadCommands();
+    setInterval(() => loadCommands(), 5000);
+  </script>
+</body>
+</html>

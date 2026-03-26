@@ -1,7 +1,7 @@
 {
   "name": "omnigent",
   "version": "1.0.0",
-  "description": "OmniAgent - Universal AI Agent Framework combining OpenClaw, TinyAGI, Hermes, and Claude capabilities",
+  "description": "OMNIGENT - Universal AI Agent Platform with 200+ commands, 19 messaging channels, multi-LLM support, webhooks, skills engine, OAuth, and REST API",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -13,7 +13,11 @@
     "build": "node scripts/build.js",
     "cli": "node src/cli.js",
     "config": "node src/config/setup.js",
-    "agent": "node src/agent/omnigent.js"
+    "agent": "node src/agent/omnigent.js",
+    "api": "node src/api/server.js",
+    "dashboard": "open src/web/dashboard.html",
+    "docker-build": "docker build -t omnigent .",
+    "docker-run": "docker-compose up"
   },
   "keywords": [
     "ai-agent",
@@ -34,7 +38,10 @@
     "ora": "^8.1.0",
     "tinyagi": "latest",
     "hermes-protocol": "latest",
-    "openclaw": "latest"
+    "openclaw": "latest",
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "better-sqlite3": "^9.2.2"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
