@@ -17,7 +17,8 @@
     "api": "node src/api/server.js",
     "dashboard": "open src/web/dashboard.html",
     "docker-build": "docker build -t omnigent .",
-    "docker-run": "docker-compose up"
+    "docker-run": "docker-compose up",
+    "setup": "node src/setup/cli.js"
   },
   "keywords": [
     "ai-agent",
@@ -46,5 +47,8 @@
   "devDependencies": {
     "eslint": "^8.57.1",
     "prettier": "^3.3.3"
+  },
+  "bin": {
+    "omnigent-setup": "./src/setup/cli.js"
   }
 }
